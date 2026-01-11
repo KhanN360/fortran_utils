@@ -12,6 +12,22 @@ module utils
     real(8), parameter :: PI = 3.141592
     
     contains
+    subroutine print_mat(A)
+        ! Print out a 2d array similar to numpy
+        real(8), dimension(:, :), intent(in) :: A
+        integer :: i
+
+        write(*,'(A)', advance='no') '[ '
+        do i = 1, size(A,1)
+            if (i > 1) write(*,'(A)', advance='no') '  '
+            write(*,'(*(F8.3,1X))', advance='no') A(i,:)
+            if (i < size(A,1)) then
+                write(*,*) ''
+            else
+                write(*,'(A)') ']'
+            end if
+        end do
+    end subroutine
 
     subroutine write_array(x, filename)
         ! Write a 1D array x into a file
