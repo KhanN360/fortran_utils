@@ -1,4 +1,5 @@
 module utils
+    ! Contains some useful fortran functions and subroutines
     implicit none
     
     ! Gas constants
@@ -11,7 +12,9 @@ module utils
     real(8), parameter :: PI = 3.141592
     
     contains
+
     subroutine write_array(x, filename)
+        ! Write a 1D array x into a file
         implicit none
         real(8), intent(in) :: x(:)
         character(*), intent(in) :: filename
@@ -25,6 +28,7 @@ module utils
     end subroutine write_array
 
     subroutine write_solution_1d(x, u, filename)
+        ! Write a 1D solution with the x location and u solution
         implicit none
         real(8), intent(in) :: x(:), u(:)
         character(*), intent(in) :: filename
@@ -37,7 +41,8 @@ module utils
         close(unit)
     end subroutine write_solution_1d
 
-    subroutine print_vec_np(x, name)
+    subroutine print_vec(x, name)
+        ! Print a vector similar to numpy
         implicit none
         real(8), intent(in) :: x(:)
         character(*), intent(in) :: name
@@ -49,10 +54,11 @@ module utils
             if (i < size(x)) write(*,'(A)', advance='no') " "
         end do
         write(*,'(A)') " ]"
-    end subroutine print_vec_np
-
+    end subroutine print_vec
 
     real(8) function Lnorms(x, order)
+        ! Compute the vector norms
+        ! TODO: Add in L1 and Linf norms
         implicit none
         real(8), dimension(:), intent(in) :: x
         integer, intent(in) :: order
@@ -64,6 +70,7 @@ module utils
     end function Lnorms
 
     function linspace(a, b, n) result(x)
+        ! A replica of linspace in LAPACK or numpy linspace
         implicit none
         integer, intent(in) :: n
         real(8), intent(in) :: a, b
