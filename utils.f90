@@ -79,11 +79,12 @@ module utils
         close(unit)
     end subroutine write_solution_1d
 
-    subroutine write_array_2d(A, filename)
+    subroutine write_array_2d(A, filename, trans)
         ! Write out a 2D array
         implicit none
         character(len=*), intent(in) :: filename
         real(8), intent(in)          :: A(:,:)
+        logical, intent(in)          :: trans
 
         integer :: i, j, nx, ny, unit
 
@@ -92,9 +93,17 @@ module utils
 
         open(newunit=unit, file=filename, status='replace', action='write')
 
-        do j = 1, ny
-            write(unit, *) (A(i, j), i = 1, nx)
-        end do
+        if (.not. trans) then
+            ! Write A as-is
+            do j = 1, ny
+                write(unit, *) (A(i, j), i = 1, nx)
+            end do
+        else
+            ! Write transpose(A)
+            do i = 1, nx
+                write(unit, *) (A(i, j), j = 1, ny)
+            end do
+        end if
 
         close(unit)
     end subroutine write_array_2d
