@@ -1,12 +1,6 @@
 module utils
     ! Contains some useful fortran functions and subroutines
     implicit none
-    
-    ! Gas constants
-    real(8), parameter :: GAMMA = 1.4d0
-    real(8), parameter :: GAMMA_RATIO = (GAMMA + 1)/(GAMMA - 1)
-    real(8), parameter :: RU = 8314.0d0
-    real(8), parameter :: MW_AIR = 28.96d0 
 
     ! Math constants
     real(8), parameter :: PI = acos(-1.0d0)
