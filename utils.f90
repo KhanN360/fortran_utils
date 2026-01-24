@@ -9,9 +9,28 @@ module utils
     real(8), parameter :: MW_AIR = 28.96d0 
 
     ! Math constants
-    real(8), parameter :: PI = 3.141592
+    real(8), parameter :: PI = acos(-1.0d0)
     
     contains
+
+    ! ================================
+    ! Array Printing
+    ! ================================
+    subroutine print_vec(x, name)
+        ! Print a vector similar to numpy
+        implicit none
+        real(8), intent(in) :: x(:)
+        character(*), intent(in) :: name
+        integer :: i
+
+        write(*,'(A)', advance='no') trim(name)//" = [ "
+        do i = 1, size(x)
+            write(*,'(F10.4)', advance='no') x(i)
+            if (i < size(x)) write(*,'(A)', advance='no') " "
+        end do
+        write(*,'(A)') " ]"
+    end subroutine print_vec
+
     subroutine print_mat(A)
         ! Print out a 2d array similar to numpy
         real(8), dimension(:, :), intent(in) :: A
@@ -29,6 +48,9 @@ module utils
         end do
     end subroutine
 
+    ! ================================
+    ! Write out arrays
+    ! ================================
     subroutine write_array(x, filename)
         ! Write a 1D array x into a file
         implicit none
@@ -57,21 +79,29 @@ module utils
         close(unit)
     end subroutine write_solution_1d
 
-    subroutine print_vec(x, name)
-        ! Print a vector similar to numpy
+    subroutine write_array_2d(A, filename)
+        ! Write out a 2D array
         implicit none
-        real(8), intent(in) :: x(:)
-        character(*), intent(in) :: name
-        integer :: i
+        character(len=*), intent(in) :: filename
+        real(8), intent(in)          :: A(:,:)
 
-        write(*,'(A)', advance='no') trim(name)//" = [ "
-        do i = 1, size(x)
-            write(*,'(F10.4)', advance='no') x(i)
-            if (i < size(x)) write(*,'(A)', advance='no') " "
+        integer :: i, j, nx, ny, unit
+
+        nx = size(A, 1)
+        ny = size(A, 2)
+
+        open(newunit=unit, file=filename, status='replace', action='write')
+
+        do j = 1, ny
+            write(unit, *) (A(i, j), i = 1, nx)
         end do
-        write(*,'(A)') " ]"
-    end subroutine print_vec
 
+        close(unit)
+    end subroutine write_array_2d
+
+    ! ================================
+    ! Misc
+    ! ================================
     real(8) function Lnorms(x, order)
         ! Compute the vector norms
         ! TODO: Add in L1 and Linf norms
@@ -103,5 +133,6 @@ module utils
             end do
         end if
     end function linspace
+
 
 end module utils
